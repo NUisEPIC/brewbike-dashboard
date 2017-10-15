@@ -24,14 +24,12 @@
 
 .flex-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .flex-item {
-  background: tomato;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  background: white;
+  flex: 1 1 0;
+  /*flex-grow: 1;*/
+  /*flex-basis: 100%;*/
 }
