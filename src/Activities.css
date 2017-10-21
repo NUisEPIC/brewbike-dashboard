@@ -1,5 +1,7 @@
 .listItem{
-  text-align:left
+  text-align:left;
+  padding-left: 10em;
+  padding-right: 10em;
 }
 
 .list{

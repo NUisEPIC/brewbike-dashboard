@@ -25,6 +25,8 @@
 .flex-container {
   display: flex;
   justify-content: space-evenly;
+  padding-left: 3em;
+  padding-right: 3em;
 }
 
 .flex-item {
