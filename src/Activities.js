@@ -10,7 +10,7 @@ import moment from 'moment'
 
 function formatTime(string) {
   var dateobj = moment(string);
-  return dateobj.format("ddd, DD-MMM  hh:mm A");
+  return dateobj.format("dddd, MMM D  h:mm A");
 }
 
 class Activities extends Component {
@@ -26,17 +26,36 @@ class Activities extends Component {
                 {data.map(function(person) {
                                     return(
                                       <div>
-                                        <ListItem className='listItem'
-                                          primaryText={person["Name"]}
+                                        <ListItem
+                                          className='listItem'
+                                          style={{
+                                            padding: '20px 16px 0px'
+                                          }}
+                                          primaryText={
+                                              <div className="list-flex-item, listUser">
+                                                {person["Name"]}
+                                              </div>
+                                          }
                                           secondaryText={
                                             <p>
-                                              <span>{formatTime(person["Time"])}</span><br/>
-                                              {person["Change"]}
+                                              <span className="listMessage">
+                                                {person["Change"]}
+                                              </span><br/>
                                             </p>
                                           }
-                                          secondaryTextLines={2}
                                           disabled={true}/>
-                                        <Divider/>
+                                        <ListItem
+                                          className="listTime"
+                                          style={{
+                                            padding: '0px 16px 16px',
+                                          }}
+                                          secondaryText={
+                                              <div>
+                                                {formatTime(person["Time"])}
+                                              </div>
+                                            }
+                                        disabled={true}/>
+                                      <Divider/>
                                       </div>
                                   )})}
               </List>
