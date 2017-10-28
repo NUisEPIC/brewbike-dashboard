@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import logo from './BrewBikeLogo.jpg';
+import logo from './Logo_White_Watermark.png';
 import './App.css';
 import Location from './Location.js';
 import Notifications from './Notifications.js';
@@ -10,13 +10,8 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          {/*<img src={logo} className="App-logo" alt="logo" />*/}
-          {/*<img src={logo} alt='logo' />*/}
-          <h1 className="App-title">BrewBike</h1>
+          <img className="App-logo" src={logo} />
         </header>
-        <p className="App-intro">
-          Welcome to BrewBike!
-        </p>
         <div className="flex-container">
           <div className="flex-item">
             <Location/>

@@ -1,7 +1,23 @@
 .listItem{
-  text-align:left
+  text-align:left;
+  padding-left: 10em;
+  padding-right: 10em;
 }
 
 .list{
   outline: thick;
+}
+
+.listTime{
+  font-size: small;
+  font-style: italic;
+  text-align: left;
+}
+
+.listUser{
+  font-weight: bold;
+  font-size: medium;
+}
+.listMessage{
+  font-size: medium;
 }
