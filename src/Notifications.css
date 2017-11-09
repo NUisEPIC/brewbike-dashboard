@@ -3,3 +3,9 @@
   margin-left: 10px;
   margin-bottom: 10px;
 }
+
+.listTime{
+  font-size: small;
+  font-style: italic;
+  text-align: left;
+}

@@ -8,7 +8,7 @@ const data = [
     "Time": "2017-10-15T13:13:30-05:00",
   },
   {
-    "Message": "Location 2: Reduced hours",
+    "Message": "The Rock: Reduced hours",
     "Time": "2017-10-15T21:17:30-05:00",
   }
 ]

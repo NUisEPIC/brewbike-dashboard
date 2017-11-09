@@ -10,6 +10,14 @@ import {data} from './fakenotifications.js';
 import {List, ListItem} from 'material-ui/List';
 import moment from 'moment'
 import './Notifications.css';
+import Subheader from 'material-ui/Subheader';
+import Avatar from 'material-ui/Avatar';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import nu from './nu.jpg';
 
 function formatTime(string) {
   var dateobj = moment(string);
@@ -18,8 +26,22 @@ function formatTime(string) {
 
 const today = new Date();
 const temporary = new Date();
-temporary.meaningful = false;
 
+const iconButtonElement = (
+  <IconButton
+    touch={true}
+    tooltip="more"
+    tooltipPosition="bottom-left"
+    >
+    <MoreVertIcon color={grey400} />
+  </IconButton>
+);
+
+const rightIconMenu = (
+  <IconMenu iconButtonElement={iconButtonElement}>
+    <MenuItem>Delete</MenuItem>
+  </IconMenu>
+);
 class Notification extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +56,7 @@ class Notification extends Component {
   _handleSaveButton =(e) => {
     var _bufferDate = this.state._bufferDate;
     var _tempMsg = this.state._tempMsg;
+
     this.setState({
       date: _bufferDate,
       open: true,
@@ -53,7 +76,7 @@ class Notification extends Component {
       open: false,
     });
   };
-  _onChangeDate =(event, date)=> {
+  _onChangeDate =(event, date) => {
     this.state._bufferDate.setFullYear(date.getFullYear());
     this.state._bufferDate.setMonth(date.getMonth());
     this.state._bufferDate.setDate(date.getDate());
@@ -108,45 +131,36 @@ class Notification extends Component {
               </div>
               <Divider />
               <h1>In Queue</h1>
-              <List className="list" style={{maxHeight:'50vh', overflow: 'auto'}}>
-                {data.map(function(outbound_msg) {
-                  return(
-                    <div>
-                      <ListItem
-                        className='listItem'
-                        style={{
-                          padding: '20px 16px 0px'
-                        }}
-                        secondaryText={
-                          <p>
-                            <span className="listMessage">
+              <div>
+                <List className="list">
+                  <Subheader>Today</Subheader>
+                  {data.map(function(outbound_msg){
+                    return (
+                      <div>
+                        <ListItem
+                          className ='listItem'
+                          leftAvatar={<Avatar src={nu}/>}
+                          rightIconButton={rightIconMenu}
+                          primaryText= {outbound_msg["Message"]}
+                          secondaryText={
+                            <p>
+                              <span className="listTime" style={{color:darkBlack}}>Delivering on {formatTime(outbound_msg["Time"])} </span><br/>
                               {outbound_msg["Message"]}
-                            </span><br/>
-                          </p>
-                        }
-                        disabled={true}
-                        />
-
-                      <ListItem
-                        className="listTime"
-                        style={{
-                          padding: '0px 16px 16px',
-                        }}
-                        secondaryText={
-                          <div>
-                            {formatTime(outbound_msg["Time"])}
-                          </div>
-                        }
-                        disabled={true}/>
-                      <Divider/>
-                    </div>
-                  )})}
+                            </p>
+                          }
+                          secondaryTextLines={2}
+                          />
+                        <Divider inset={true} />
+                      </div>
+                    )
+                  })}
                 </List>
-              </MuiThemeProvider>
-            </div>
+              </div>
+            </MuiThemeProvider>
           </div>
-        );
-      }
+        </div>
+      );
     }
+  }
 
-    export default Notification;
+  export default Notification;
