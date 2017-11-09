@@ -4,6 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {List, ListItem} from 'material-ui/List';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import request from 'superagent';
 
 var styles = {
     textAlign: 'center'
@@ -36,7 +37,7 @@ class Location extends Component {
                     Location Info
                 </h1>
                 <Card style={styles.justifyContent}>
-                    <CardHeader 
+                    <CardHeader
                     title='Location 1'
                     subtitle='12:00pm - 5pm'
                     titleStyle={styles.textAlign}/>
@@ -45,7 +46,7 @@ class Location extends Component {
                     </CardActions>
                 </Card>
                 <Card>
-                    <CardHeader 
+                    <CardHeader
                     title='Location 2'
                     subtitle='1pm - 5pm'/>
                     <CardActions>
