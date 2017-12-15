@@ -11,13 +11,7 @@ import {List, ListItem} from 'material-ui/List';
 import moment from 'moment'
 import './Notifications.css';
 import Subheader from 'material-ui/Subheader';
-import Avatar from 'material-ui/Avatar';
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import nu from './nu.jpg';
+import {darkBlack} from 'material-ui/styles/colors';
 
 function formatTime(string) {
   var dateobj = moment(string);
@@ -25,49 +19,49 @@ function formatTime(string) {
 }
 
 const today = new Date();
-const temporary = new Date();
 
-const iconButtonElement = (
-  <IconButton
-    touch={true}
-    tooltip="more"
-    tooltipPosition="bottom-left"
-    >
-    <MoreVertIcon color={grey400} />
-  </IconButton>
-);
-
-const rightIconMenu = (
-  <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem>Delete</MenuItem>
-  </IconMenu>
-);
+const initialization = null;
 class Notification extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: '',
       open: false,
-      date: temporary,
-      _bufferDate: temporary,
-      _tempMsg: '',
+      currentMsg: initialization,
+      currentDate: initialization,
+      currentTime: initialization,
+      snackMsg: '',
+      _bufferDate: today
     };
   }
   _handleSaveButton =(e) => {
-    var _bufferDate = this.state._bufferDate;
-    var _tempMsg = this.state._tempMsg;
+    if (this.state.currentMsg == ''){
+      this.setState({
+        open:true,
+        snackMsg: "Message cannot be empty"
+      })
+      return;
+    }
+
+    if (this.state.currentDate == null){
+      this.setState({
+        open: true,
+        snackMsg: "Please fill out the date"
+      })
+      return;
+    }
 
     this.setState({
-      date: _bufferDate,
       open: true,
-      message: _tempMsg,
+      snackMsg: "Information Saved"
     });
-    // alert(`Your Message: \n\n` + `${this.state.message}\n \n` + `This message will be delivered on:\n\n${this.state.date}`)
   };
   _handleCancelInfo = () => {
     this.setState({
-      message: '',
-      _tempMsg: '',
+      currentMsg: '',
+      currentDate: null,
+      currentTime: null,
+      snackMsg: "Message Cancelled",
+      open:true
     });
   };
 
@@ -80,13 +74,24 @@ class Notification extends Component {
     this.state._bufferDate.setFullYear(date.getFullYear());
     this.state._bufferDate.setMonth(date.getMonth());
     this.state._bufferDate.setDate(date.getDate());
+    var _bufferDate = this.state._bufferDate;
+
+    this.setState({
+      currentDate: _bufferDate
+    });
   };
 
   _onChangeTime =(event,date) => {
     this.state._bufferDate.setHours(date.getHours());
     this.state._bufferDate.setMinutes(date.getMinutes());
     this.state._bufferDate.setSeconds(date.getSeconds());
-    this.state._bufferDate.setMilliseconds(date.getMilliseconds())};
+    this.state._bufferDate.setMilliseconds(date.getMilliseconds())
+    var _bufferDate = this.state._bufferDate;
+
+    this.setState({
+      currentDate: _bufferDate
+    });
+  };
 
     render() {
       return (
@@ -101,18 +106,21 @@ class Notification extends Component {
                   floatingLabelText = "Your Message"
                   multiLine = {true}
                   rows = {2}
-                  value = {this.state._tempMsg}
-                  onChange={(e, newMessage) => this.setState({_tempMsg: newMessage})}
+                  value = {this.state.currentMsg}
+                  onChange={(e, newMessage) => this.setState({currentMsg: newMessage})}
                   /> <br />
                 <DatePicker
                   hintText="What day should we send it?"
                   onChange={this._onChangeDate}
+                  value = {this.state.currentDate}
                   minDate={today}
                   firstDayOfWeek={0}
                   />
                 <TimePicker hintText ="When?"
                   minutesStep={5}
-                  onChange = {this._onChangeTime}/>
+                  onChange = {this._onChangeTime}
+                  value = {this.state.currentDate}
+                  />
                 <RaisedButton
                   label="Cancel"
                   secondary={true}
@@ -125,7 +133,7 @@ class Notification extends Component {
                   onClick = {this._handleSaveButton}/>
                 <Snackbar
                   open ={this.state.open}
-                  message = "Information Saved!"
+                  message = {this.state.snackMsg}
                   autoHideDuration={4000}
                   onRequestClose={this.handleRequestClose}/>
               </div>
@@ -139,8 +147,6 @@ class Notification extends Component {
                       <div>
                         <ListItem
                           className ='listItem'
-                          leftAvatar={<Avatar src={nu}/>}
-                          rightIconButton={rightIconMenu}
                           primaryText= {outbound_msg["Message"]}
                           secondaryText={
                             <p>
