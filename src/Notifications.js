@@ -19,23 +19,22 @@ function formatTime(string) {
 }
 
 const today = new Date();
-const initialization = null;
 
 class Notification extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
-      currentMsg: initialization,
-      currentDate: initialization,
-      currentTime: initialization,
-      snackMsg: '',
-      _bufferDate: today
+      open: false,                          // Whether the snackbar is open or not
+      currentMsg: null,                     // The message to send
+      currentDate: null,                    // The current Date object to send
+      snackMsg: '',                         // The Snackbar Message
+      _bufferDate: today                    // A temporary date object (Used to update currentDate)
     };
   }
-  
+
   // Function called when "save" button is pressed"
   _handleSaveButton =(e) => {
+
     // User forgot to fill out message
     if (this.state.currentMsg == '' || this.state.currentMsg == null){
       this.setState({
@@ -69,7 +68,6 @@ class Notification extends Component {
     this.setState({
       currentMsg: '',
       currentDate: null,
-      currentTime: null,
       snackMsg: "Message Cancelled",
       open:true
     });
