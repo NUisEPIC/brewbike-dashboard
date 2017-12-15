@@ -4,8 +4,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
-import './Activities.css';
-import {data} from './fakeactivites.js';
+import '../css/Activities.css';
+import {data} from '../fakedata/fakeactivites.js';
 import moment from 'moment'
 
 function formatTime(string) {
