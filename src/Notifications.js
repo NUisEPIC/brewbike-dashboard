@@ -33,7 +33,7 @@ class Notification extends Component {
   }
 
   // Function called when "save" button is pressed"
-  _handleSaveButton =(e) => {
+  _handleSaveButton = (e) => {
 
     // User forgot to fill out message
     if (this.state.currentMsg == '' || this.state.currentMsg == null){
@@ -65,6 +65,7 @@ class Notification extends Component {
 
   // Function called when "cancel" button pressed
   _handleCancelInfo = () => {
+    // Resets the state of the notification form 
     this.setState({
       currentMsg: '',
       currentDate: null,
@@ -161,11 +162,13 @@ class Notification extends Component {
                     return (
                       <div>
                         <ListItem
-                          className ='listItem'
+                          className = 'listItem'
                           primaryText= {outbound_msg["Message"]}
                           secondaryText={
                             <p>
-                              <span className="listTime" style={{color:darkBlack}}>Delivering on {formatTime(outbound_msg["Time"])} </span><br/>
+                              <span
+                                className="listTime"
+                                style={{color:darkBlack}}>Delivering on {formatTime(outbound_msg["Time"])} </span><br/>
                               {outbound_msg["Message"]}
                             </p>
                           }
