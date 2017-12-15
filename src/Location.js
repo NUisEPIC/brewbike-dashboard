@@ -4,6 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {List, ListItem} from 'material-ui/List';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import Data from './LocationInfo.js';
 
 var styles = {
     textAlign: 'center'
@@ -28,13 +29,23 @@ class Location extends Component {
         this.setState({popOut: false});
     }
 
+    componentWillMount() {
+        let locations = [];
+        for (var id in Data.Data) {
+            locations.push(Data.Data[id]);
+        }
+        this.setState({locations: locations});
+    }
+
     render() {
+        console.log(this.state.locations);
         return(
             <div>
             <MuiThemeProvider>
                 <h1>
                     Location Info
                 </h1>
+
                 <Card style={styles.justifyContent}>
                     <CardHeader 
                     title='Location 1'
