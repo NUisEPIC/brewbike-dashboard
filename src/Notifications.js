@@ -19,8 +19,8 @@ function formatTime(string) {
 }
 
 const today = new Date();
-
 const initialization = null;
+
 class Notification extends Component {
   constructor(props) {
     super(props);
@@ -113,7 +113,7 @@ class Notification extends Component {
                   hintText="What day should we send it?"
                   onChange={this._onChangeDate}
                   value = {this.state.currentDate}
-                  minDate={today}
+                  minDate={new Date()}
                   firstDayOfWeek={0}
                   />
                 <TimePicker hintText ="When?"
