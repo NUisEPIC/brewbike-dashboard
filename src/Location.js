@@ -47,7 +47,7 @@ class Location extends Component {
                 </h1>
 
                 <Card style={styles.justifyContent}>
-                    <CardHeader 
+                    <CardHeader
                     title='Location 1'
                     subtitle='12:00pm - 5pm'
                     titleStyle={styles.textAlign}/>
@@ -56,7 +56,7 @@ class Location extends Component {
                     </CardActions>
                 </Card>
                 <Card>
-                    <CardHeader 
+                    <CardHeader
                     title='Location 2'
                     subtitle='1pm - 5pm'/>
                     <CardActions>
