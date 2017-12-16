@@ -65,7 +65,7 @@ class Notification extends Component {
 
   // Function called when "cancel" button pressed
   _handleCancelInfo = () => {
-    // Resets the state of the notification form 
+    // Resets the state of the notification form
     this.setState({
       currentMsg: '',
       currentDate: null,
