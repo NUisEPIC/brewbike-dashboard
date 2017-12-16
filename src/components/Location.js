@@ -55,14 +55,11 @@ class Location extends Component {
             errorText:"All fields are required",
             hasStart:false, // for timePicker for the add shop modal
             hasEnd:false, // for timePicker for the add shop modal
+            pickedStartTime: null, // to store the times being picked
+            pickedEndTime: null,
+            pickedLocation: null,
             locations: []
         }
-    }
-
-    // helps add location - opens modal
-    buttonOnClickHandler = (e) => {
-        // TODO
-        this.handleOpen();
     }
     
     // for the add location modal
@@ -73,6 +70,28 @@ class Location extends Component {
     handleClose = () => {
         this.setState({modalOpen: false, errorText: "All fields are required", hasStart: false, hasEnd: false});
     };
+
+    // handler for submitting location
+    submitLocationHandler = (e) => {
+        // TODO
+        this.handleClose(); // closing modal
+        fetch('/v1/addshop', // making post request to add shop
+        {
+            method:'POST',
+            body: JSON.stringify({
+                start_time: this.state.pickedStartTime,
+                end_time: this.state.pickedEndTime,
+                location: this.state.pickedLocation
+            }),
+            headers: { "Content-Type": "application/json" }
+        })
+        .then( (res) => {
+            console.log(res);
+        })
+        .catch( (err) => {
+            console.error(err)
+        })
+    }
     
     render() {
 
@@ -86,7 +105,7 @@ class Location extends Component {
               label="Submit"
               primary={true}
               disabled={!(!this.state.errorText && this.state.hasStart && this.state.hasEnd)}
-              onClick={this.handleClose}
+              onClick={this.submitLocationHandler}
             />,
           ];
 
@@ -101,7 +120,7 @@ class Location extends Component {
                     {/* <LocationItem location="Test location" open="an opening time" close="a closing time" />
                     <LocationItem location="Test location 2" open="an opening time" close="a closing time" /> */}
                     <RaisedButton label="Add Shop" primary={true} fullWidth={false} style={{margin:12}}
-                        onClick={this.buttonOnClickHandler}
+                        onClick={this.handleOpen}
                     />
                     <Dialog
                         title="New Shop"
@@ -115,9 +134,9 @@ class Location extends Component {
                             floatingLabelText="Shop Location"
                             onChange={(e, val) => {
                                 if (val) {
-                                    this.setState({errorText: null})                                
+                                    this.setState({errorText: null, pickedLocation: val})                                
                                 } else {
-                                    this.setState({errorText: "All fields are required"}) 
+                                    this.setState({errorText: "All fields are required", pickedLocation: val}) 
                                 }
                             }}
                         /><br />
@@ -125,9 +144,9 @@ class Location extends Component {
                             hintText="Opening Time"
                             onChange={(e, date) => {
                                 if (date !== null) {
-                                    this.setState({hasStart: true})                                
+                                    this.setState({hasStart: true, pickedStartTime: date})                                
                                 } else {
-                                    this.setState({hasStart: false}) 
+                                    this.setState({hasStart: false, pickedStartTime: date}) 
                                 }
                             }}
                         /><br/>
@@ -135,9 +154,9 @@ class Location extends Component {
                             hintText="Closing Time"
                             onChange={(e, date) => {
                                 if (date) {
-                                    this.setState({hasEnd: true})                                
+                                    this.setState({hasEnd: true, pickedEndTime: date})                                
                                 } else {
-                                    this.setState({hasEnd: false}) 
+                                    this.setState({hasEnd: false, pickedEndTime: date}) 
                                 }
                             }}
                         />
