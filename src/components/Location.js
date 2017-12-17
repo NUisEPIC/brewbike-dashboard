@@ -46,7 +46,7 @@ class LocationItem extends Component {
 }
 
 class Location extends Component {
-    
+
     constructor(props) {
         super(props)
         this.state = {
@@ -61,12 +61,12 @@ class Location extends Component {
             locations: []
         }
     }
-    
+
     // for the add location modal
     handleOpen = () => {
         this.setState({modalOpen: true});
     };
-    
+
     handleClose = () => {
         this.setState({modalOpen: false, errorText: "All fields are required", hasStart: false, hasEnd: false});
     };
@@ -92,7 +92,7 @@ class Location extends Component {
             console.error(err)
         })
     }
-    
+
     render() {
 
         const actions = [
@@ -134,9 +134,9 @@ class Location extends Component {
                             floatingLabelText="Shop Location"
                             onChange={(e, val) => {
                                 if (val) {
-                                    this.setState({errorText: null, pickedLocation: val})                                
+                                    this.setState({errorText: null, pickedLocation: val})
                                 } else {
-                                    this.setState({errorText: "All fields are required", pickedLocation: val}) 
+                                    this.setState({errorText: "All fields are required", pickedLocation: val})
                                 }
                             }}
                         /><br />
@@ -144,9 +144,9 @@ class Location extends Component {
                             hintText="Opening Time"
                             onChange={(e, date) => {
                                 if (date !== null) {
-                                    this.setState({hasStart: true, pickedStartTime: date})                                
+                                    this.setState({hasStart: true, pickedStartTime: date})
                                 } else {
-                                    this.setState({hasStart: false, pickedStartTime: date}) 
+                                    this.setState({hasStart: false, pickedStartTime: date})
                                 }
                             }}
                         /><br/>
@@ -154,9 +154,9 @@ class Location extends Component {
                             hintText="Closing Time"
                             onChange={(e, date) => {
                                 if (date) {
-                                    this.setState({hasEnd: true, pickedEndTime: date})                                
+                                    this.setState({hasEnd: true, pickedEndTime: date})
                                 } else {
-                                    this.setState({hasEnd: false, pickedEndTime: date}) 
+                                    this.setState({hasEnd: false, pickedEndTime: date})
                                 }
                             }}
                         />

@@ -52,15 +52,31 @@ class Notification extends Component {
       })
       return;
     }
-
     // No errors...thus we are safe to proceed and send data to the backend
-    // Magic Code to send to the backend
-
-    // Opens snackbar to give user feedback of a successful request
-    this.setState({
-      open: true,
-      snackMsg: "Information Saved"
-    });
+    fetch('/v1/notify',                               // making post request to notify
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        notify_time: this.state.currentDate,
+        text: this.state.currentMsg,
+        user: "Not sure what to put here..."          // what is the user field supposed to be for?
+      }),
+      headers: {"Content-Type": "application/json"}
+    })
+    .then((res) => {
+      console.log(res);
+      this.setState({
+        open: true,
+        snackMsg: "Message saved"
+      })
+    })
+    .catch((err) => {
+      console.error(err)
+      this.setState({
+        open: true,
+        snackMsg: `Ran into the following error: ${err}\n`
+      })
+    })
   };
 
   // Function called when "cancel" button pressed
