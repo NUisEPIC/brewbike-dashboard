@@ -20,6 +20,20 @@ function formatTime(string) {
 
 const today = new Date();
 
+  // handler for getting notifications to initially populate the list items
+      fetch('/v1/notifications')
+      // Trying to just fetch the data in the first place.
+      .then((res) => {
+          console.log(res);
+          // we'll just take the json object returned (res) and store it in data2
+          // have to check by actually running the api server though!
+          var data2 = res;
+          console.log(data2);
+      })
+      .catch((err) => {
+          console.error(err)
+      })
+
 class Notification extends Component {
   constructor(props) {
     super(props);
@@ -31,6 +45,7 @@ class Notification extends Component {
       _bufferDate: today                    // A temporary date object (Used to update currentDate)
     };
   }
+
 
   // Function called when "save" button is pressed"
   _handleSaveButton = (e) => {
@@ -190,7 +205,7 @@ class Notification extends Component {
                           }
                           secondaryTextLines={2}
                           />
-                        <Divider inset={true} />
+                        <Divider/>
                       </div>
                     )
                   })}
