@@ -74,7 +74,7 @@ class Notification extends Component {
       console.error(err)
       this.setState({
         open: true,
-        snackMsg: `Ran into the following error: ${err}\n`
+        snackMsg: `ERROR: ${err}\n`
       })
     })
   };
