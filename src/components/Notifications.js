@@ -6,10 +6,10 @@ import DatePicker from 'material-ui/DatePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import Divider from 'material-ui/Divider';
-import {data} from './fakenotifications.js';
+import {data} from '../fakedata/fakenotifications.js';
 import {List, ListItem} from 'material-ui/List';
 import moment from 'moment'
-import './Notifications.css';
+import '../css/Notifications.css';
 import Subheader from 'material-ui/Subheader';
 import {darkBlack} from 'material-ui/styles/colors';
 
