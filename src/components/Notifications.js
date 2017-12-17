@@ -84,6 +84,14 @@ class Notification extends Component {
         open: true,
         snackMsg: "Message saved"
       })
+      // will also have to refresh the list item so it's up to date!
+      // fetch('/v1/notifications')
+      // .then((res) => {
+      //     data2 = res;
+      // })
+      // .catch((err) => {
+      //     console.error(err)
+      // })
     })
     .catch((err) => {
       console.error(err)
