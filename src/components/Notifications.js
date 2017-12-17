@@ -17,35 +17,38 @@ function formatTime(string) {
   var dateobj = moment(string);
   return dateobj.format("dddd, MMM D  h:mm A");
 }
-
 const today = new Date();
-
-  // handler for getting notifications to initially populate the list items
-      fetch('/v1/notifications')
-      // Trying to just fetch the data in the first place.
-      .then((res) => {
-          console.log(res);
-          // we'll just take the json object returned (res) and store it in data2
-          // have to check by actually running the api server though!
-          var data2 = res;
-          console.log(data2);
-      })
-      .catch((err) => {
-          console.error(err)
-      })
 
 class Notification extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,                          // Whether the snackbar is open or not
-      currentMsg: null,                     // The message to send
-      currentDate: null,                    // The current Date object to send
-      snackMsg: '',                         // The Snackbar Message
-      _bufferDate: today                    // A temporary date object (Used to update currentDate)
+      open: false,                                                              // Whether the snackbar is open or not
+      currentMsg: null,                                                         // The message to send
+      currentDate: null,                                                        // The current Date object to send
+      snackMsg: '',                                                             // The Snackbar Message
+      _bufferDate: today,                                                       // A temporary date object (Used to update currentDate)
+      json_list: null
     };
   }
 
+  componentDidMount(){
+    // TODO
+    // handler for getting notifications to initially populate the list items
+    fetch('http://localhost:2000/v1/notifications?Limit=5')
+    // Trying to just fetch the data in the first place.
+    .then((res) => {
+      // After fetching the JSON object update the state
+      this.setState({
+        json_list: res,
+        open: true,
+        snackMsg: "Mounted!"
+      });
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  }
 
   // Function called when "save" button is pressed"
   _handleSaveButton = (e) => {
@@ -68,30 +71,21 @@ class Notification extends Component {
       return;
     }
     // No errors...thus we are safe to proceed and send data to the backend
-    fetch('/v1/notify',                               // making post request to notify
+    fetch('http://localhost:2000/v1/notify',                                    // making post request to notify
     {
       method: 'POST',
       body: JSON.stringify({
         notify_time: this.state.currentDate,
         text: this.state.currentMsg,
-        user: "Not sure what to put here..."          // what is the user field supposed to be for?
+        user: " "          // Temporary placeholder
       }),
       headers: {"Content-Type": "application/json"}
     })
     .then((res) => {
-      console.log(res);
       this.setState({
         open: true,
         snackMsg: "Message saved"
       })
-      // will also have to refresh the list item so it's up to date!
-      // fetch('/v1/notifications')
-      // .then((res) => {
-      //     data2 = res;
-      // })
-      // .catch((err) => {
-      //     console.error(err)
-      // })
     })
     .catch((err) => {
       console.error(err)
@@ -135,7 +129,7 @@ class Notification extends Component {
     });
   };
   // Function called when the time changes
-  _onChangeTime =(event,date) => {
+  _onChangeTime = (event,date) => {
     this.state._bufferDate.setHours(date.getHours());
     this.state._bufferDate.setMinutes(date.getMinutes());
     this.state._bufferDate.setSeconds(date.getSeconds());
@@ -147,83 +141,82 @@ class Notification extends Component {
       currentDate: _bufferDate
     });
   };
-
-    render() {
-      return (
+  render() {
+    return (
+      <div>
+        <h1>
+          Notifications
+        </h1>
         <div>
-          <h1>
-            Notifications
-          </h1>
-          <div>
-            <MuiThemeProvider>
-              <div>
-                <TextField
-                  floatingLabelText = "Your Message"
-                  multiLine = {true}
-                  rows = {2}
-                  value = {this.state.currentMsg}
-                  onChange={(e, newMessage) => this.setState({currentMsg: newMessage})}
-                  /> <br />
-                <DatePicker
-                  hintText="What day should we send it?"
-                  onChange={this._onChangeDate}
-                  value = {this.state.currentDate}
-                  minDate={new Date()}
-                  firstDayOfWeek={0}
-                  />
-                <TimePicker hintText ="When?"
-                  minutesStep={5}
-                  onChange = {this._onChangeTime}
-                  value = {this.state.currentDate}
-                  />
-                <RaisedButton
-                  label="Cancel"
-                  secondary={true}
-                  className="button"
-                  onClick = {this._handleCancelInfo}/>
-                <RaisedButton
-                  label="Save Message"
-                  primary={true}
-                  className="button"
-                  onClick = {this._handleSaveButton}/>
-                <Snackbar
-                  open ={this.state.open}
-                  message = {this.state.snackMsg}
-                  autoHideDuration={4000}
-                  onRequestClose={this.handleRequestClose}/>
-              </div>
-              <Divider />
-              <h1>In Queue</h1>
-              <div>
-                <List className="list">
-                  <Subheader>Today</Subheader>
-                  {data.map(function(outbound_msg){
-                    return (
-                      <div>
-                        <ListItem
-                          className = 'listItem'
-                          primaryText= {outbound_msg["Message"]}
-                          secondaryText={
-                            <p>
-                              <span
-                                className="listTime"
-                                style={{color:darkBlack}}>Delivering on {formatTime(outbound_msg["Time"])} </span><br/>
-                              {outbound_msg["Message"]}
-                            </p>
-                          }
-                          secondaryTextLines={2}
-                          />
-                        <Divider/>
-                      </div>
-                    )
-                  })}
-                </List>
-              </div>
-            </MuiThemeProvider>
-          </div>
+          <MuiThemeProvider>
+            <div>
+              <TextField
+                floatingLabelText = "Your Message"
+                multiLine = {true}
+                rows = {2}
+                value = {this.state.currentMsg}
+                onChange={(e, newMessage) => this.setState({currentMsg: newMessage})}
+                /> <br />
+              <DatePicker
+                hintText="What day should we send it?"
+                onChange={this._onChangeDate}
+                value = {this.state.currentDate}
+                minDate={new Date()}
+                firstDayOfWeek={0}
+                />
+              <TimePicker hintText ="When?"
+                minutesStep={5}
+                onChange = {this._onChangeTime}
+                value = {this.state.currentDate}
+                />
+              <RaisedButton
+                label="Cancel"
+                secondary={true}
+                className="button"
+                onClick = {this._handleCancelInfo}/>
+              <RaisedButton
+                label="Save Message"
+                primary={true}
+                className="button"
+                onClick = {this._handleSaveButton}/>
+              <Snackbar
+                open ={this.state.open}
+                message = {this.state.snackMsg}
+                autoHideDuration={4000}
+                onRequestClose={this.handleRequestClose}/>
+            </div>
+            <Divider />
+            <h1>In Queue</h1>
+            <div>
+              <List className="list">
+                <Subheader>Today</Subheader>
+                {data.map(function(outbound_msg){
+                  return (
+                    <div>
+                      <ListItem
+                        className = 'listItem'
+                        primaryText= {outbound_msg["Message"]}
+                        secondaryText={
+                          <p>
+                            <span
+                              className="listTime"
+                              style={{color:darkBlack}}>Delivering on {formatTime(outbound_msg["Time"])} </span><br/>
+                            {outbound_msg["Message"]}
+                          </p>
+                        }
+                        secondaryTextLines={2}
+                        />
+                      <Divider/>
+                    </div>
+                  )
+                })}
+              </List>
+            </div>
+          </MuiThemeProvider>
         </div>
-      );
-    }
+      </div>
+    );
   }
+}
 
-  export default Notification;
+export default Notification;
