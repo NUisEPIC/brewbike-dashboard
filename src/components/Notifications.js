@@ -6,10 +6,10 @@ import DatePicker from 'material-ui/DatePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import Divider from 'material-ui/Divider';
-import {data} from './fakenotifications.js';
+import {data} from '../fakedata/fakenotifications.js';
 import {List, ListItem} from 'material-ui/List';
 import moment from 'moment'
-import './Notifications.css';
+import '../css/Notifications.css';
 import Subheader from 'material-ui/Subheader';
 import {darkBlack} from 'material-ui/styles/colors';
 
@@ -56,7 +56,10 @@ class Notification extends Component {
 
     // No errors...thus we are safe to proceed and send data to the backend
     // Magic Code to send to the backend
-
+    
+    //update activities section
+    const {newActivity} = this.props;
+    newActivity("A new notification sent!", Date.now(), "admin");
     // Opens snackbar to give user feedback of a successful request
     this.setState({
       open: true,
