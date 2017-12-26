@@ -34,6 +34,8 @@ class Notification extends Component {
     };
   }
   _handleSaveButton =(e) => {
+    const {newActivity} = this.props;
+    newActivity("A new notification sent!", Date.now(), "admin");
     if (this.state.currentMsg == ''){
       this.setState({
         open:true,
