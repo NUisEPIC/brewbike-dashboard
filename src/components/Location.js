@@ -48,7 +48,8 @@ class LocationItem extends Component {
 class Location extends Component {
     
     constructor(props) {
-        super(props)
+        super(props);
+
         this.state = {
             modalOpen: false,
             canSubmit:false, // for the submit button for the add shop modal
@@ -61,7 +62,23 @@ class Location extends Component {
             locations: []
         }
     }
-    
+
+    loadShops() {
+        fetch('/v1/shops.json', {
+            method: 'GET'
+        })
+        .then( (res) => {
+            console.log(res); // debugging statement
+            res.json().then( (data) => {
+                console.log(data); // debugging statement
+                this.setState({locations: data.shops});
+            })
+        })
+        .catch( (err) => {
+            console.error(err); // debugging statement
+        });
+    }
+
     // for the add location modal
     handleOpen = () => {
         this.setState({modalOpen: true});
@@ -87,10 +104,15 @@ class Location extends Component {
         })
         .then( (res) => {
             console.log(res);
+            this.loadShops() // load shops again to reflect the added shop
         })
         .catch( (err) => {
             console.error(err)
         })
+    }
+
+    componentDidMount() {
+        this.loadShops();
     }
     
     render() {
@@ -107,8 +129,18 @@ class Location extends Component {
               disabled={!(!this.state.errorText && this.state.hasStart && this.state.hasEnd)}
               onClick={this.submitLocationHandler}
             />,
-          ];
+        ];
 
+        // console.log(this.state.locations)
+        // if (this.state.locations) { // if not empty
+            
+        //     console.log('executed')
+        //     var locationItems = this.state.locations.map((element) => {
+        //         <LocationItem location={element.location} open={element.start_time} close={element.end_time} />
+        //     });
+        //     console.log(locationItems.length)
+        // }
+        
         return (
             <div>
                 <h1>
@@ -117,8 +149,11 @@ class Location extends Component {
                 Click on shop to edit or remove
                 <br/><br/>
                 <MuiThemeProvider>
-                    {/* <LocationItem location="Test location" open="an opening time" close="a closing time" />
-                    <LocationItem location="Test location 2" open="an opening time" close="a closing time" /> */}
+                    
+                    {this.state.locations.map(element => // this is the for loop that dynamically generates new shop items
+                        <LocationItem location={element.location} open={element.start_time} close={element.end_time} />
+                    )}
+
                     <RaisedButton label="Add Shop" primary={true} fullWidth={false} style={{margin:12}}
                         onClick={this.handleOpen}
                     />
