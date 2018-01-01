@@ -31,6 +31,7 @@ class Notification extends Component {
       json_list: null
     };
   }
+<<<<<<< HEAD
 
   componentDidMount(){
     // TODO
@@ -55,6 +56,10 @@ class Notification extends Component {
 
     // User forgot to fill out message
     if (this.state.currentMsg == '' || this.state.currentMsg == null){
+=======
+  _handleSaveButton =(e) => {
+    if (this.state.currentMsg === ''){
+>>>>>>> pranav
       this.setState({
         open:true,
         snackMsg: "Message cannot be empty"
