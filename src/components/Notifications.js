@@ -31,35 +31,12 @@ class Notification extends Component {
       json_list: null
     };
   }
-<<<<<<< HEAD
-
-  componentDidMount(){
-    // TODO
-    // handler for getting notifications to initially populate the list items
-    fetch('http://localhost:2000/v1/notifications?Limit=5')
-    // Trying to just fetch the data in the first place.
-    .then((res) => {
-      // After fetching the JSON object update the state
-      this.setState({
-        json_list: res,
-        open: true,
-        snackMsg: "Mounted!"
-      });
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-  }
 
   // Function called when "save" button is pressed"
   _handleSaveButton = (e) => {
 
     // User forgot to fill out message
     if (this.state.currentMsg == '' || this.state.currentMsg == null){
-=======
-  _handleSaveButton =(e) => {
-    if (this.state.currentMsg === ''){
->>>>>>> pranav
       this.setState({
         open:true,
         snackMsg: "Message cannot be empty"
