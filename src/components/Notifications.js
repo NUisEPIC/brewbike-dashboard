@@ -34,7 +34,7 @@ class Notification extends Component {
     };
   }
   _handleSaveButton =(e) => {
-    if (this.state.currentMsg == ''){
+    if (this.state.currentMsg === ''){
       this.setState({
         open:true,
         snackMsg: "Message cannot be empty"

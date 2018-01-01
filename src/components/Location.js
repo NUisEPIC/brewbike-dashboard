@@ -8,14 +8,34 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import TimePicker from 'material-ui/TimePicker';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import grey400 from 'material-ui/styles/colors';
 
 import '../css/Location.css';
 
+const iconButtonElement = (
+    <IconButton
+      touch={true}
+      tooltip="edit / delete"
+      tooltipPosition="bottom-left"
+    >
+      <MoreVertIcon color={grey400} />
+    </IconButton>
+);
+
+const RightIconMenu = (props) => (
+    <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
+      <MenuItem onClick={props.editClick.bind(this, props.itemId)}>Edit</MenuItem>
+      <MenuItem onClick={props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
+    </IconMenu>
+);
+
 class LocationItem extends Component {
 
-    // helps edit location details
-    locationItemOnClickHandler = (e) => {
-        // TODO
+    constructor(props) {
+        super(props);
     }
 
     render() {
@@ -36,7 +56,9 @@ class LocationItem extends Component {
                       </p>
                     }
                     secondaryTextLines={2}
-                    onClick={this.locationItemOnClickHandler}
+                    rightIconButton={<RightIconMenu editClick={this.props.editClick} deleteClick={this.props.deleteClick} itemId={this.props.itemId} />} // passing reference to parent location item
+                    // onClick={this.props.onClick}
+                    disabled={true}
                 />
                 <Divider/>
             </div>
@@ -90,7 +112,6 @@ class Location extends Component {
 
     // handler for submitting location
     submitLocationHandler = (e) => {
-        // TODO
         this.handleClose(); // closing modal
         fetch('/v1/addshop', // making post request to add shop
         {
@@ -101,6 +122,29 @@ class Location extends Component {
                 location: this.state.pickedLocation
             }),
             headers: { "Content-Type": "application/json" }
+        })
+        .then( (res) => {
+            console.log(res);
+            this.loadShops() // load shops again to reflect the added shop
+        })
+        .catch( (err) => {
+            console.error(err)
+        })
+    }
+
+    // helps edit location details
+    editItemOnClickHandler = (itemId, e) => {
+        console.log(itemId); // debugging statement
+        
+    }
+
+    // helps delete location details
+    deleteItemOnClickHandler = (itemId, e) => {
+        console.log(itemId); // debugging statement
+        fetch(`/v1/shops/${itemId}`,
+        {
+            method:'DELETE',
+            // type:'cors'
         })
         .then( (res) => {
             console.log(res);
@@ -130,28 +174,21 @@ class Location extends Component {
               onClick={this.submitLocationHandler}
             />,
         ];
-
-        // console.log(this.state.locations)
-        // if (this.state.locations) { // if not empty
-            
-        //     console.log('executed')
-        //     var locationItems = this.state.locations.map((element) => {
-        //         <LocationItem location={element.location} open={element.start_time} close={element.end_time} />
-        //     });
-        //     console.log(locationItems.length)
-        // }
         
         return (
             <div>
                 <h1>
                     Shop Info
                 </h1>
-                Click on shop to edit or remove
                 <br/><br/>
                 <MuiThemeProvider>
                     
                     {this.state.locations.map(element => // this is the for loop that dynamically generates new shop items
-                        <LocationItem location={element.location} open={element.start_time} close={element.end_time} />
+                        <LocationItem location={element.location} open={element.start_time} close={element.end_time} 
+                            editClick={this.editItemOnClickHandler}
+                            deleteClick={this.deleteItemOnClickHandler}
+                            itemId={element._id}
+                        />
                     )}
 
                     <RaisedButton label="Add Shop" primary={true} fullWidth={false} style={{margin:12}}
