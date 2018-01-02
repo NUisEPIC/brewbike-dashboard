@@ -23,52 +23,22 @@ function formatTime(string) {
 }
 const today = new Date();
 
-//
-// const iconButtonElement = (
-//     <IconButton
-//       touch={true}
-//       tooltip="delete"
-//       tooltipPosition="bottom-left"
-//     >
-//       <MoreVertIcon color={grey400} />
-//     </IconButton>
-// );
-//
-// const RightIconMenu = (props) => (
-//     <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
-//       <MenuItem onClick={props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
-//     </IconMenu>
-// );
-//
-// class NotificationItem extends Component{
-//   constructor(props){
-//     super(props);
-//   }
-//   render() {
-//     return (
-//       <div>
-//         <ListItem
-//           className = 'listItem'
-//           primaryText ={
-//             <div className="list-flex-item, listUser">
-//               {this.props.notify_time}
-//             </div>
-//           }
-//           secondaryText={
-//             <p>
-//               Message: <span className="listTime"> {this.props.text}</span>
-//             <br/>
-//             </p>
-//           }
-//           secondaryTextLines={3}
-//           rightIconButton={<RightIconMenu deleteClick={this.props.deleteClick} itemID={this.props.itemID}/>}
-//           disabled={true}
-//           />
-//         <Divider />
-//       </div>
-//     );
-//   }
-// }
+
+const iconButtonElement = (
+  <IconButton
+    touch={true}
+    tooltip="delete"
+    tooltipPosition="bottom-left"
+  >
+    <MoreVertIcon color={grey400} />
+  </IconButton>
+);
+
+const rightIconMenu = (
+  <IconMenu iconButtonElement={iconButtonElement}>
+    <MenuItem>Delete</MenuItem>
+  </IconMenu>
+);
 
 class Notification extends Component {
   constructor(props) {
@@ -253,6 +223,7 @@ class Notification extends Component {
                       <ListItem
                         className = 'listItem'
                         primaryText= {outbound_msg["text"]}
+                        rightIconButton={rightIconMenu}
                         secondaryText={
                           <p>
                             <span
