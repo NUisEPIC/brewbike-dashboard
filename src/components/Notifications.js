@@ -12,6 +12,10 @@ import moment from 'moment'
 import '../css/Notifications.css';
 import Subheader from 'material-ui/Subheader';
 import {darkBlack} from 'material-ui/styles/colors';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import grey400 from 'material-ui/styles/colors';
 
 function formatTime(string) {
   var dateobj = moment(string);
@@ -19,18 +23,83 @@ function formatTime(string) {
 }
 const today = new Date();
 
+//
+// const iconButtonElement = (
+//     <IconButton
+//       touch={true}
+//       tooltip="delete"
+//       tooltipPosition="bottom-left"
+//     >
+//       <MoreVertIcon color={grey400} />
+//     </IconButton>
+// );
+//
+// const RightIconMenu = (props) => (
+//     <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
+//       <MenuItem onClick={props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
+//     </IconMenu>
+// );
+//
+// class NotificationItem extends Component{
+//   constructor(props){
+//     super(props);
+//   }
+//   render() {
+//     return (
+//       <div>
+//         <ListItem
+//           className = 'listItem'
+//           primaryText ={
+//             <div className="list-flex-item, listUser">
+//               {this.props.notify_time}
+//             </div>
+//           }
+//           secondaryText={
+//             <p>
+//               Message: <span className="listTime"> {this.props.text}</span>
+//             <br/>
+//             </p>
+//           }
+//           secondaryTextLines={3}
+//           rightIconButton={<RightIconMenu deleteClick={this.props.deleteClick} itemID={this.props.itemID}/>}
+//           disabled={true}
+//           />
+//         <Divider />
+//       </div>
+//     );
+//   }
+// }
+
 class Notification extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       open: false,                                                              // Whether the snackbar is open or not
       currentMsg: null,                                                         // The message to send
       currentDate: null,                                                        // The current Date object to send
       snackMsg: '',                                                             // The Snackbar Message
       _bufferDate: today,                                                       // A temporary date object (Used to update currentDate)
-      json_list: null
-    };
+      json_list: null,
+      messages: []
+    }
   }
+  loadNotifications(){
+    fetch('/v1/notifications?limit=10', {
+      method: 'GET'
+    })
+    .then((res) => {
+      console.log(res);
+      res.json().then((data) => {
+        console.log(data);
+        this.setState({messages: data});
+      })
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }
+
 
   // Function called when "save" button is pressed"
   _handleSaveButton = (e) => {
@@ -64,6 +133,7 @@ class Notification extends Component {
       headers: {"Content-Type": "application/json"}
     })
     .then((res) => {
+      this.loadNotifications()
       this.setState({
         open: true,
         snackMsg: "Message saved"
@@ -122,7 +192,12 @@ class Notification extends Component {
     this.setState({
       currentDate: _bufferDate
     });
-  };
+  }
+
+  componentDidMount() {
+    this.loadNotifications();
+  }
+
   render() {
     return (
       <div>
@@ -172,21 +247,19 @@ class Notification extends Component {
             <div>
               <List className="list">
                 <Subheader>Today</Subheader>
-                {data.map(function(outbound_msg){
+                {this.state.messages.map(function(outbound_msg){
                   return (
                     <div>
                       <ListItem
                         className = 'listItem'
-                        primaryText= {outbound_msg["Message"]}
+                        primaryText= {outbound_msg["text"]}
                         secondaryText={
                           <p>
                             <span
                               className="listTime"
-                              style={{color:darkBlack}}>Delivering on {formatTime(outbound_msg["Time"])} </span><br/>
-                            {outbound_msg["Message"]}
+                              style={{color:darkBlack}}>Delivering on {outbound_msg["notify_time"]} </span><br/>
                           </p>
                         }
-                        secondaryTextLines={2}
                         />
                       <Divider/>
                     </div>
