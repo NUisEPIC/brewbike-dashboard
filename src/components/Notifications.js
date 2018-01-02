@@ -36,13 +36,15 @@ const iconButtonElement = (
 
 const RightIconMenu = (props) => (
     <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
-      <MenuItem>Delete</MenuItem>
+      <MenuItem onClick = {props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
     </IconMenu>
 );
 
+//<button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+
 // const RightIconMenu = (props) => (
 //     <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
-//       <MenuItem onClick={props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
+//       <MenuItem>Delete</MenuItem>
 //     </IconMenu>
 // );
 
