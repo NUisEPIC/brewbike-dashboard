@@ -36,8 +36,7 @@ class Notification extends Component {
   
   // Function called when "save" button is pressed"
   _handleSaveButton =(e) => {
-    // User forgot to fill out message
-    if (this.state.currentMsg == '' || this.state.currentMsg == null){
+    if (this.state.currentMsg === ''){
       this.setState({
         open:true,
         snackMsg: "Message cannot be empty"
