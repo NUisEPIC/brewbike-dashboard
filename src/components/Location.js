@@ -36,9 +36,67 @@ class LocationItem extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            editModalOpen: false,
+            // editCanSubmit: false,
+            editHasStart: false,
+            editHasEnd: false,
+            editErrorText: null,
+            editPickedLocation: null,
+            editPickedStartTime: null, // to store the times being picked
+            editPickedEndTime: null,
+        }
+    }
+
+    // for the edit location modal
+    handleEditOpen = () => {
+        this.setState({editModalOpen: true});
+    }
+
+    handleEditClose = () => {
+        this.setState({editModalOpen: false, editErrorText: null, editHasStart: false, editHasEnd: false});
+    }
+
+    // helps edit location details + makes the PUT request
+    editItemSubmitOnClickHandler = (itemId) => {
+        this.handleEditClose();
+        console.log(itemId); // debugging statement
+
+        fetch(`/v1/shops/${itemId}`, 
+        {
+            method:'PUT',
+            body: JSON.stringify({
+                start_time: this.state.editPickedStartTime,
+                end_time: this.state.editPickedEndTime,
+                location: this.state.editPickedLocation
+            }),
+            headers: { "Content-Type": "application/json" }
+        })
+        .then( (res) => {
+            // console.log(res);
+            this.props.loadShopsFunction() // load shops again to reflect the edited shop
+        })
+        .catch( (err) => {
+            console.error(err)
+        })
     }
 
     render() {
+
+        const editModalActions = [
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              onClick={this.handleEditClose}
+            />,
+            <FlatButton
+              label="Submit"
+              primary={true}
+              disabled={!(!this.state.editErrorText && this.state.editHasStart && this.state.editHasEnd)}
+              onClick={this.editItemSubmitOnClickHandler.bind(this, this.props.itemId)}
+            />,
+        ];
+
         return (
             <div>
                 <ListItem
@@ -56,10 +114,51 @@ class LocationItem extends Component {
                       </p>
                     }
                     secondaryTextLines={2}
-                    rightIconButton={<RightIconMenu editClick={this.props.editClick} deleteClick={this.props.deleteClick} itemId={this.props.itemId} />} // passing reference to parent location item
+                    rightIconButton={<RightIconMenu editClick={this.handleEditOpen} deleteClick={this.props.deleteClick} itemId={this.props.itemId} />} // passing reference to parent location item
                     // onClick={this.props.onClick}
                     disabled={true}
                 />
+                {/* this is the modal for editing a shop */}
+                <Dialog
+                        title="Edit Shop"
+                        actions={editModalActions}
+                        modal={true}
+                        open={this.state.editModalOpen}
+                    >
+                        <TextField
+                            hintText="Enter shop location"
+                            errorText={this.state.editErrorText}
+                            defaultValue={this.props.location}
+                            floatingLabelText="Shop Location"
+                            onChange={(e, val) => {
+                                if (val) {
+                                    this.setState({editErrorText: null, editPickedLocation: val})                                
+                                } else {
+                                    this.setState({editErrorText: "All fields are required", editPickedLocation: val}) 
+                                }
+                            }}
+                        /><br />
+                        <TimePicker
+                            hintText="Opening Time"
+                            onChange={(e, date) => {
+                                if (date !== null) {
+                                    this.setState({editHasStart: true, editPickedStartTime: date})                                
+                                } else {
+                                    this.setState({editHasStart: false, editPickedStartTime: date}) 
+                                }
+                            }}
+                        /><br/>
+                        <TimePicker
+                            hintText="Closing Time"
+                            onChange={(e, date) => {
+                                if (date) {
+                                    this.setState({editHasEnd: true, editPickedEndTime: date})                                
+                                } else {
+                                    this.setState({editHasEnd: false, editPickedEndTime: date}) 
+                                }
+                            }}
+                        />
+                    </Dialog>
                 <Divider/>
             </div>
         );
@@ -74,7 +173,7 @@ class Location extends Component {
 
         this.state = {
             modalOpen: false,
-            canSubmit:false, // for the submit button for the add shop modal
+            // canSubmit:false, // for the submit button for the add shop modal
             errorText:"All fields are required",
             hasStart:false, // for timePicker for the add shop modal
             hasEnd:false, // for timePicker for the add shop modal
@@ -132,12 +231,6 @@ class Location extends Component {
         })
     }
 
-    // helps edit location details
-    editItemOnClickHandler = (itemId, e) => {
-        console.log(itemId); // debugging statement
-        
-    }
-
     // helps delete location details
     deleteItemOnClickHandler = (itemId, e) => {
         console.log(itemId); // debugging statement
@@ -174,6 +267,8 @@ class Location extends Component {
               onClick={this.submitLocationHandler}
             />,
         ];
+
+        
         
         return (
             <div>
@@ -185,15 +280,17 @@ class Location extends Component {
                     
                     {this.state.locations.map(element => // this is the for loop that dynamically generates new shop items
                         <LocationItem location={element.location} open={element.start_time} close={element.end_time} 
-                            editClick={this.editItemOnClickHandler}
+                            editClick={this.handleEditOpen}
                             deleteClick={this.deleteItemOnClickHandler}
                             itemId={element._id}
+                            loadShopsFunction={this.loadShops.bind(this)}
                         />
                     )}
 
                     <RaisedButton label="Add Shop" primary={true} fullWidth={false} style={{margin:12}}
                         onClick={this.handleOpen}
                     />
+                    {/* This is the modal for adding a shop */}
                     <Dialog
                         title="New Shop"
                         actions={actions}
@@ -233,6 +330,7 @@ class Location extends Component {
                             }}
                         />
                     </Dialog>
+                    
                 </MuiThemeProvider>
             </div>
         );
