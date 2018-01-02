@@ -34,19 +34,19 @@ const iconButtonElement = (
   </IconButton>
 );
 
-const RightIconMenu = (props) => (
-    <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
-      <MenuItem onClick = {props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
-    </IconMenu>
-);
-
-//<button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
-
 // const RightIconMenu = (props) => (
 //     <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
-//       <MenuItem>Delete</MenuItem>
+//       <MenuItem onClick = {props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
 //     </IconMenu>
 // );
+
+// <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+
+const RightIconMenu = (props) => (
+    <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
+      <MenuItem>Delete</MenuItem>
+    </IconMenu>
+);
 
 
 
@@ -64,7 +64,7 @@ class NotificationItem extends Component {
                     className='listItem'
                     primaryText={
                         <div className="list-flex-item, listUser">
-                          Sending: {this.props.time}
+                          On {formatTime(this.props.time)}
                         </div>
                     }
                     secondaryText={
