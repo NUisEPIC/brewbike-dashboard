@@ -34,12 +34,54 @@ const iconButtonElement = (
   </IconButton>
 );
 
-const rightIconMenu = (
-  <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem>Delete</MenuItem>
-  </IconMenu>
+const RightIconMenu = (props) => (
+    <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
+      <MenuItem>Delete</MenuItem>
+    </IconMenu>
 );
 
+// const RightIconMenu = (props) => (
+//     <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
+//       <MenuItem onClick={props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
+//     </IconMenu>
+// );
+
+
+
+
+class NotificationItem extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div>
+                <ListItem
+                    className='listItem'
+                    primaryText={
+                        <div className="list-flex-item, listUser">
+                          Sending: {this.props.time}
+                        </div>
+                    }
+                    secondaryText={
+                      <p>
+                        <span className="listMessage"> {this.props.message} </span>
+                        <br/>
+                      </p>
+                    }
+                    secondaryTextLines={2}
+                    rightIconButton={<RightIconMenu deleteClick={this.props.deleteClick} itemId={this.props.itemId} />} // passing reference to parent location item
+                    // onClick={this.props.onClick}
+                    disabled={true}
+                />
+                <Divider/>
+            </div>
+        );
+    }
+
+}
 class Notification extends Component {
   constructor(props) {
     super(props);
@@ -50,7 +92,6 @@ class Notification extends Component {
       currentDate: null,                                                        // The current Date object to send
       snackMsg: '',                                                             // The Snackbar Message
       _bufferDate: today,                                                       // A temporary date object (Used to update currentDate)
-      json_list: null,
       messages: []
     }
   }
@@ -214,30 +255,13 @@ class Notification extends Component {
             </div>
             <Divider />
             <h1>In Queue</h1>
-            <div>
-              <List className="list">
-                <Subheader>Today</Subheader>
-                {this.state.messages.map(function(outbound_msg){
-                  return (
-                    <div>
-                      <ListItem
-                        className = 'listItem'
-                        primaryText= {outbound_msg["text"]}
-                        rightIconButton={rightIconMenu}
-                        secondaryText={
-                          <p>
-                            <span
-                              className="listTime"
-                              style={{color:darkBlack}}>Delivering on {outbound_msg["notify_time"]} </span><br/>
-                          </p>
-                        }
-                        />
-                      <Divider/>
-                    </div>
-                  )
-                })}
-              </List>
-            </div>
+            {this.state.messages.map(element =>
+            <NotificationItem message={element.text} time = {element.notify_time}
+            user={element.user}
+          itemId={element._id}
+          deleteClick = {this.deleteItemOnClickHandler}
+        />
+    )}
           </MuiThemeProvider>
         </div>
       </div>
