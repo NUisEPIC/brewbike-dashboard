@@ -34,19 +34,19 @@ const iconButtonElement = (
   </IconButton>
 );
 
-// const RightIconMenu = (props) => (
-//     <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
-//       <MenuItem onClick = {props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
-//     </IconMenu>
-// );
+const RightIconMenu = (props) => (
+    <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
+      <MenuItem onClick = {props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
+    </IconMenu>
+);
 
 // <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
 
-const RightIconMenu = (props) => (
-    <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
-      <MenuItem>Delete</MenuItem>
-    </IconMenu>
-);
+// const RightIconMenu = (props) => (
+//     <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
+//       <MenuItem>Delete</MenuItem>
+//     </IconMenu>
+// );
 
 
 
@@ -135,17 +135,18 @@ class Notification extends Component {
       return;
     }
     // No errors...thus we are safe to proceed and send data to the backend
-    fetch('http://localhost:2000/v1/notify',                                    // making post request to notify
+    fetch('v1/notify',                                    // making post request to notify
     {
       method: 'POST',
       body: JSON.stringify({
         notify_time: this.state.currentDate,
         text: this.state.currentMsg,
-        user: " "          // Temporary placeholder
+        user: "Admin"          // Temporary placeholder
       }),
       headers: {"Content-Type": "application/json"}
     })
     .then((res) => {
+      console.log(this.state.currentDate)
       this.loadNotifications()
       this.setState({
         open: true,

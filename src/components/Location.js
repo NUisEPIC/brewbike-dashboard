@@ -211,6 +211,11 @@ class Location extends Component {
 
     // handler for submitting location
     submitLocationHandler = (e) => {
+        // TODO
+        const {newActivity} = this.props;
+        //save a new activity and send back to App.js
+        newActivity('Time changed for location ' + this.state.pickedLocation, Date.now(), 'admin'); 
+        
         this.handleClose(); // closing modal
         fetch('/v1/addshop', // making post request to add shop
         {

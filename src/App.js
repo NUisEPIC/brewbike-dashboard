@@ -6,6 +6,26 @@ import Notifications from './components/Notifications.js';
 import Activities from './components/Activities.js';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {activities: []};
+    this.newActivity = this.newActivity.bind(this);
+  }
+
+  newActivity(description, time, person) {
+    let newActivity = {
+      key: this.state.activities.length+1,
+      description: description,
+      time: time,
+      person: person
+    }
+    this.setState((prevState, props) => {
+      return {
+        activities: prevState.activities.concat(newActivity)
+      };
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -14,13 +34,13 @@ class App extends Component {
         </header>
         <div className="flex-container">
           <div className="flex-item">
-            <Location/>
+            <Location newActivity = {this.newActivity} />
           </div>
           <div className="flex-item">
-            <Notifications/>
+            <Notifications newActivity = {this.newActivity} />
           </div>
           <div className="flex-item">
-            <Activities/>
+            <Activities activities = {this.state.activities} />
           </div>
         </div>
       </div>
