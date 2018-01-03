@@ -34,6 +34,7 @@ const iconButtonElement = (
   </IconButton>
 );
 
+//currently this is breaking atm! Havent fully implemented the delete function either.
 const RightIconMenu = (props) => (
     <IconMenu iconButtonElement={iconButtonElement} style={{float:"right"}}>
       <MenuItem onClick = {props.deleteClick.bind(this, props.itemId)}>Delete</MenuItem>
