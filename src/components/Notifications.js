@@ -181,6 +181,11 @@ class Notification extends Component {
     });
   };
 
+  // TODO - once inQueue backend functionality is implemented
+  _handleDeleteItemOnClick = (itemId) => {
+    console.log(itemId); // debugging statement
+  }
+
   // Function called when datepicker changes
   _onChangeDate =(event, date) => {
 
@@ -263,7 +268,7 @@ class Notification extends Component {
             <NotificationItem message={element.text} time = {element.notify_time}
             user={element.user}
           itemId={element._id}
-          deleteClick = {this.deleteItemOnClickHandler}
+          deleteClick = {this._handleDeleteItemOnClick}
         />
     )}
           </MuiThemeProvider>
