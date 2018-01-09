@@ -24,6 +24,22 @@ class App extends Component {
         activities: prevState.activities.concat(newActivity)
       };
     });
+    fetch('v1/addactivity',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        description: description,
+        time: time,
+        person: person
+      }),
+      headers: { "Content-Type": "application/json" }
+    })
+    .then( (res) => {
+      console.log(res);
+    })
+    .catch( (err) => {
+      console.error(err);
+    });
   }
 
   render() {
