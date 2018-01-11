@@ -19,8 +19,8 @@ function formatTime(string) {
 }
 
 const today = new Date();
-
 const initialization = null;
+
 class Notification extends Component {
   constructor(props) {
     super(props);
@@ -33,10 +33,10 @@ class Notification extends Component {
       _bufferDate: today
     };
   }
+  
+  // Function called when "save" button is pressed"
   _handleSaveButton =(e) => {
-    const {newActivity} = this.props;
-    newActivity("A new notification sent!", Date.now(), "admin");
-    if (this.state.currentMsg == ''){
+    if (this.state.currentMsg === ''){
       this.setState({
         open:true,
         snackMsg: "Message cannot be empty"
@@ -44,19 +44,29 @@ class Notification extends Component {
       return;
     }
 
+    // User forgot to fill out date or time
     if (this.state.currentDate == null){
       this.setState({
         open: true,
-        snackMsg: "Please fill out the date"
+        snackMsg: "Please fill out the date and time"
       })
       return;
     }
 
+    // No errors...thus we are safe to proceed and send data to the backend
+    // Magic Code to send to the backend
+    
+    //update activities section
+    const {newActivity} = this.props;
+    newActivity("A new notification sent!", Date.now(), "admin");
+    // Opens snackbar to give user feedback of a successful request
     this.setState({
       open: true,
       snackMsg: "Information Saved"
     });
   };
+
+  // Function called when "cancel" button pressed
   _handleCancelInfo = () => {
     this.setState({
       currentMsg: '',
@@ -67,22 +77,28 @@ class Notification extends Component {
     });
   };
 
+  // Function to close snackbar
   handleRequestClose = () => {
     this.setState({
       open: false,
     });
   };
+
+  // Function called when datepicker changes
   _onChangeDate =(event, date) => {
+
+    // Changes the states of _bufferDate, a temporary date object
     this.state._bufferDate.setFullYear(date.getFullYear());
     this.state._bufferDate.setMonth(date.getMonth());
     this.state._bufferDate.setDate(date.getDate());
     var _bufferDate = this.state._bufferDate;
 
+    // Updates the state of currentDate
     this.setState({
       currentDate: _bufferDate
     });
   };
-
+  // Function called when the time changes
   _onChangeTime =(event,date) => {
     this.state._bufferDate.setHours(date.getHours());
     this.state._bufferDate.setMinutes(date.getMinutes());
@@ -90,6 +106,7 @@ class Notification extends Component {
     this.state._bufferDate.setMilliseconds(date.getMilliseconds())
     var _bufferDate = this.state._bufferDate;
 
+    // Updates the state of currentDate to the user inputed time
     this.setState({
       currentDate: _bufferDate
     });
@@ -115,7 +132,7 @@ class Notification extends Component {
                   hintText="What day should we send it?"
                   onChange={this._onChangeDate}
                   value = {this.state.currentDate}
-                  minDate={today}
+                  minDate={new Date()}
                   firstDayOfWeek={0}
                   />
                 <TimePicker hintText ="When?"

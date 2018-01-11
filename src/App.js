@@ -10,20 +10,11 @@ class App extends Component {
     super(props);
     this.state = {activities: []};
     this.newActivity = this.newActivity.bind(this);
+    this.loadActivities = this.loadActivities.bind(this);
+    this.clearActivities = this.clearActivities.bind(this);
   }
 
   newActivity(description, time, person) {
-    let newActivity = {
-      key: this.state.activities.length+1,
-      description: description,
-      time: time,
-      person: person
-    }
-    this.setState((prevState, props) => {
-      return {
-        activities: prevState.activities.concat(newActivity)
-      };
-    });
     fetch('v1/addactivity',
     {
       method: 'POST',
@@ -34,12 +25,65 @@ class App extends Component {
       }),
       headers: { "Content-Type": "application/json" }
     })
-    .then( (res) => {
-      console.log(res);
+    .then((res) => {
+      res.text().then((text) => {
+        console.log(text)
+      });
     })
     .catch( (err) => {
       console.error(err);
     });
+    this.loadActivities();
+    /*
+    let newActivity = {
+      key: this.state.activities.length+1,
+      description: description,
+      time: time,
+      person: person
+    }
+    this.setState((prevState, props) => {
+      return {
+        activities: prevState.activities.concat(newActivity)
+      };
+    }); 
+    */
+  }
+
+  loadActivities() {
+    fetch('/v1/loadactivities', 
+    {
+      method: "GET"
+    })
+    .then((res) => {
+      res.json().then((data) => {
+        console.log(data);
+        this.setState({activities: data});
+      })
+    })
+  }
+
+  clearActivities() {
+    fetch('/v1/clearactivities',
+    {
+      method: "DELETE"
+    })
+    .then((res) => {
+      res.text().then((text) => {
+        console.log(text);
+        this.loadActivities();
+      })
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }
+
+  componentDidUpdate() {
+    console.log(this.state.activities);
+  }
+
+  componentDidMount() {
+    this.loadActivities();
   }
 
   render() {
@@ -56,7 +100,7 @@ class App extends Component {
             <Notifications newActivity = {this.newActivity} />
           </div>
           <div className="flex-item">
-            <Activities activities = {this.state.activities} />
+            <Activities activities = {this.state.activities} clearActivities = {this.clearActivities}/>
           </div>
         </div>
       </div>
