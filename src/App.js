@@ -4,6 +4,37 @@ import './css/App.css';
 import Location from './components/Location.js';
 import Notifications from './components/Notifications.js';
 import Activities from './components/Activities.js';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import AppBar from 'material-ui/AppBar';
+import FlatButton from 'material-ui/FlatButton';
+
+import LoginModal from './components/Authentication.js'
+
+
+
+
+class TopBar extends Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = { user: "admin" };
+  }
+
+  //TODO
+  handleLogout() {
+    console.log("Handle logout being called");
+  }
+
+  render() {
+    return (
+      <AppBar
+        title={`Welcome, ${this.state.user}!`}
+        iconElementRight={<FlatButton label="Logout" onClick={this.handleLogout} />}
+      />
+    );
+  }
+
+}
 
 class App extends Component {
   constructor(props) {
@@ -88,7 +119,10 @@ class App extends Component {
 
   render() {
     return (
+      <MuiThemeProvider>
       <div className="App">
+        <TopBar />
+        <LoginModal />
         <header className="App-header">
           <img className="App-logo" src={logo} />
         </header>
@@ -104,6 +138,7 @@ class App extends Component {
           </div>
         </div>
       </div>
+      </ MuiThemeProvider>
     );
   }
 }
