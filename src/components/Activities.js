@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {List, ListItem} from 'material-ui/List';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Divider from 'material-ui/Divider';
+import FlatButton from 'material-ui/FlatButton';
 import '../css/Activities.css';
 //import {data} from '../fakedata/fakeactivites.js';
 import moment from 'moment'
@@ -19,7 +20,7 @@ class Activities extends Component {
   }
 
   render() {
-    const {activities} = this.props;
+    const {activities, clearActivities} = this.props;
       return (
         <div>
           <h1>
@@ -65,6 +66,11 @@ class Activities extends Component {
                 )
               }
             </List>
+            <FlatButton
+              label = "clear activities"
+              primary = {true}
+              onClick = {clearActivities}
+            />
             </div>
         </MuiThemeProvider>
         </div>
