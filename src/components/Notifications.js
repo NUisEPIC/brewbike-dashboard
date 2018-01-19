@@ -136,7 +136,7 @@ class Notification extends Component {
       return;
     }
     // No errors...thus we are safe to proceed and send data to the backend
-    fetch('v1/notify',                                    // making post request to notify
+    fetch('/v1/notify/schedule',                                    // making post request to notify
     {
       method: 'POST',
       body: JSON.stringify({
@@ -242,7 +242,7 @@ class Notification extends Component {
                 firstDayOfWeek={0}
                 />
               <TimePicker hintText ="When?"
-                minutesStep={5}
+                minutesStep={1}
                 onChange = {this._onChangeTime}
                 value = {this.state.currentDate}
                 />
